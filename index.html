@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Intelligence Academy - Learn AI Easily</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #000428, #004e92);
+            text-align: center;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        a {
+            color: white;
+        }
+        
+        ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        ul li a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .container {
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 650px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .menu button {
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #fff;
+            color: #003366;
+            font-weight: bold;
+        }
+        .menu button:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .code-editor {
+            width: 100%;
+            height: 200px;
+            background: #222;
+            color: #0f0;
+            font-family: monospace;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+        }
+        .run-btn {
+            background: #00c853;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        .run-btn:hover {
+            background: #00e676;
+        }
+        .output-box {
+            margin-top: 15px;
+            padding: 10px;
+            background: black;
+            color: lime;
+            border-radius: 10px;
+            text-align: left;
+            white-space: pre-wrap;
+            min-height: 100px;
+            font-family: monospace;
+        }
+        .back-btn {
+            margin-top: 20px;
+            background: #ff5252 !important;
+            color: white !important;
+            padding: 10px 20px;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #ff1744 !important;
+        }
+        /* Quiz Section Styles */
+        #quiz {
+            text-align: left;
+            margin-top: 20px;
+        }
+        #quiz .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #ffffff;
+        }
+        #quiz .answers {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        #quiz .answers label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #ffffff;
+            cursor: pointer;
+        }
+        #quiz .answers input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        #progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        #progress {
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .correct-feedback {
+            color: #4CAF50 !important;
+            font-weight: bold;
+        }
+        .incorrect-feedback {
+            color: #f44336 !important;
+            font-weight: bold;
+        }
+        /* Theme toggle styles */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            color: white;
+        }
+
+/* ===== LIGHT MODE THEME ===== */
+body.light-mode {
+    background-color: #ffffff;
+    color: #1a1a1a;
+}
+
+body.light-mode .container,
+body.light-mode .card,
+body.light-mode .header,
+body.light-mode .footer {
+    background-color: #f4f4f4;
+    color: #1a1a1a;
+}
+
+/* ===== LINKS ===== */
+a {
+    color: #66ccff; /* light blue for dark mode */
+}
+
+body.light-mode a {
+    color: #003366; /* dark blue for light mode */
+}
+a {
+    transition: color 0.3s ease;
+}
+
+    </style>
+
+</head>
+<body>
+    <div class="container" id="quiz-history" style="display: none;">
+    <h1>📜 Quiz History</h1>
+    <div id="history-content" class="output-box"></div>
+    <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+    <button class="run-btn" style="margin-top: 10px;" onclick="clearHistory()">🗑 Clear History</button>
+</div>
+
+     
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+
+    <!-- AI Home Page -->
+    <div class="container" id="ai-home">
+        <h1>Thinking About Studying AI?</h1>
+        <div class="menu">
+            <p>Here are some key things to consider:</p>
+            <ul style="text-align: left; margin: 20px auto; max-width: 500px;">
+                <li>Do you enjoy problem-solving and logic?</li>
+                <li>Are you interested in math and statistics?</li>
+                <li>Do you have curiosity about machine learning and automation?</li>
+                <li>Are you ready to commit to continuous learning?</li>
+            </ul>
+            <button class="back-btn" onclick="navigateTo('main-menu')" 
+                    style="background: #2196F3; margin-top: 30px;">
+                Get Started ➔
+            </button>
+        </div>
+    </div>
+    <script>
+    // ===== THEME TOGGLE FUNCTIONS =====
+    function toggleTheme() {
+        document.body.classList.toggle('light-mode');
+        const isLightMode = document.body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+    }
+
+    function initializeTheme() {
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    }
+
+    // Initialize theme when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        initializeTheme();
+        navigateTo('ai-home'); // <- Moved this outside initializeTheme
+    });
+</script>
+
+
+    <!-- Main Menu -->
+    <div class="container" id="main-menu" style="display: none;">
+        <h1>Future Intelligence Academy</h1>
+        <p>Learn Artificial Intelligence in an easy and interactive way!</p>
+        <div class="menu">
+            <button onclick="navigateTo('ask-ai')">💡 Ask AI Anything!</button>
+            <button onclick="navigateTo('beginner-learning')">🟢 Beginner Learning Path</button>
+            <button onclick="navigateTo('professional-learning')">🔵 Professional Learning Path</button>
+            <button onclick="navigateTo('career-roadmap')">📈 AI Career Roadmap</button>
+            <button onclick="navigateTo('practice')">💻 Practice Your Skills</button>
+            <button onclick="navigateTo('Knowledge')">🎯 Test Your AI Knowledge</button>
+        </div>
+        <button class="back-btn" onclick="navigateTo('ai-home')">⬅ Back to AI Guide</button>
+        <button onclick="viewHistory()" style="background-color: #4CAF50; color: white; padding: 10px 15px; border: none; border-radius: 5px;">📜 View Quiz History</button>
+    </div>
+    
+
+    <!-- Ask AI Page -->
+    <div class="container" id="ask-ai" style="display: none;">
+        <h1>Get To Know AI!</h1>
+        <p>Type your question below and get an AI-powered answer.</p>
+        <input type="text" id="question" placeholder="Type your question here..." />
+        <button onclick="askAI()">Ask AI</button>
+        <p id="response"></p>
+        <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+    </div>
+    
+    <!-- Beginner Learning Path -->
+    <div class="container" id="beginner-learning" style="display: none;">
+        <h1>Beginner Learning Path</h1>
+        <p>Start your AI journey with these free resources:</p>
+        <div class="menu">
+            <button>📚 Learning Resources</button>
+            <ul>
+                <li><a href="https://www.freecodecamp.org/learn/machine-learning-with-python/" target="_blank">freeCodeCamp - ML with Python</a></li>
+                <li><a href="https://www.kaggle.com/learn/intro-to-machine-learning" target="_blank">Kaggle - Intro to Machine Learning</a></li>
+                <li><a href="https://www.udacity.com/course/intro-to-machine-learning-with-pytorch--ud188" target="_blank">Udacity - ML Basics</a></li>
+                <li><a href="https://www.edx.org/course/cs50s-introduction-to-artificial-intelligence-with-python" target="_blank">Harvard's CS50 AI Course (Free on edX)</a></li>
+            </ul>
+            <button>🛠 Practical AI Skills</button>
+            <ul>
+                <li><a href="https://www.tensorflow.org/tutorials/" target="_blank">TensorFlow - AI Model Building</a></li>
+                <li><a href="https://scikit-learn.org/stable/tutorial/basic/tutorial.html" target="_blank">Scikit-learn - ML Hands-on Guide</a></li>
+                <li><a href="https://pytorch.org/tutorials/" target="_blank">PyTorch - Deep Learning Tutorials</a></li>
+                <li><a href="https://www.coursera.org/learn/machine-learning" target="_blank">Coursera - Machine Learning by Andrew Ng (Free Audit)</a></li>
+            </ul>
+        </div>
+        <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+    </div>
+
+    <!-- Professional Learning Path -->
+    <div class="container" id="professional-learning" style="display: none;">
+        <h1>Professional Learning Path</h1>
+        <p>Advance your AI knowledge with these free resources:</p>
+        <div class="menu">
+            <button>📖 Professional AI Topics</button>
+            <ul>
+                <li><a href="https://cs50.ai/" target="_blank">Harvard's CS50 AI Course</a></li>
+                <li><a href="https://www.deeplearning.ai/courses/" target="_blank">DeepLearning.AI - Specializations</a></li>
+                <li><a href="https://arxiv.org/list/cs.AI/recent" target="_blank">Arxiv - Latest AI Research Papers</a></li>
+            </ul>
+            <button>🤖 Complex Data Analysis & Advanced AI</button>
+            <ul>
+                <li><a href="https://fast.ai/" target="_blank">Fast.ai - Practical Deep Learning</a></li>
+                <li><a href="https://ai.google/education/" target="_blank">Google AI Education</a></li>
+                <li><a href="https://www.udacity.com/course/ai-programming-with-python-nanodegree--nd089" target="_blank">Udacity - AI Programming with Python (Free Course)</a></li>
+            </ul>
+        </div>
+        <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+    </div>
+
+    <!-- Career Roadmap -->
+    <div class="container" id="career-roadmap" style="display: none;">
+        <h1>AI Career Roadmap</h1>
+        <p>Choose your AI career path and get free resources for each career:</p>
+        <div class="menu">
+            <button onclick="navigateTo('ml-engineer')">🧠 Machine Learning Engineer</button>
+            <button onclick="navigateTo('data-scientist')">📊 Data Scientist</button>
+            <button onclick="navigateTo('ai-researcher')">🔬 AI Researcher</button>
+            <button onclick="navigateTo('ai-startup-founder')">🚀 AI Startup Founder</button>
+        </div>
+        <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+    </div>
+
+    <!-- Machine Learning Engineer -->
+    <div class="container" id="ml-engineer" style="display: none;">
+        <h1>Machine Learning Engineer Resources</h1>
+        <ul>
+            <li><a href="https://www.coursera.org/specializations/deep-learning" target="_blank">Deep Learning Specialization</a></li>
+            <li><a href="https://www.udacity.com/course/machine-learning-engineer-nanodegree--nd009t" target="_blank">Machine Learning Engineer Nanodegree</a></li>
+        </ul>
+        <button class="back-btn" onclick="navigateTo('career-roadmap')">⬅ Back to Career Roadmap</button>
+    </div>
+
+    <!-- Data Scientist -->
+    <div class="container" id="data-scientist" style="display: none;">
+        <h1>Data Scientist Resources</h1>
+        <ul>
+            <li><a href="https://www.coursera.org/learn/python-data-analysis" target="_blank">Python for Data Analysis</a></li>
+            <li><a href="https://www.kaggle.com/learn/data-science" target="_blank">Kaggle Data Science Course</a></li>
+        </ul>
+        <button class="back-btn" onclick="navigateTo('career-roadmap')">⬅ Back to Career Roadmap</button>
+    </div>
+
+    <!-- AI Researcher -->
+    <div class="container" id="ai-researcher" style="display: none;">
+        <h1>AI Researcher Resources</h1>
+        <ul>
+            <li><a href="https://arxiv.org/list/cs.AI/recent" target="_blank">Latest AI Research Papers</a></li>
+            <li><a href="https://www.deeplearning.ai/courses/" target="_blank">Deep Learning AI Courses</a></li>
+        </ul>
+        <button class="back-btn" onclick="navigateTo('career-roadmap')">⬅ Back to Career Roadmap</button>
+    </div>
+
+    <!-- AI Startup Founder -->
+    <div class="container" id="ai-startup-founder" style="display: none;">
+        <h1>AI Startup Founder Resources</h1>
+        <ul>
+            <li><a href="https://www.ycombinator.com/library" target="_blank">Y Combinator Startup Library</a></li>
+            <li><a href="https://startupschool.org/" target="_blank">Startup School</a></li>
+        </ul>
+        <button class="back-btn" onclick="navigateTo('career-roadmap')">⬅ Back to Career Roadmap</button>
+    </div>
+
+    <!-- Programming Language Selection -->
+    <div class="container" id="practice" style="display: none;">
+        <h1>Select Your Coding Language</h1>
+        <div class="menu">
+            <button onclick="navigateTo('practice-python')">🐍 Python</button>
+            <button onclick="navigateTo('practice-java')">☕ Java</button>
+            <button onclick="navigateTo('practice-css')">🔵 CSS</button>
+            <button onclick="navigateTo('practice-cpp')">🎯 C++</button>
+            <button onclick="navigateTo('practice-html')">💻 HTML</button>
+            <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+        </div>
+    </div>
+
+    <!-- Python Editor -->
+    <div class="container" id="practice-python" style="display: none;">
+        <h1>Python Editor</h1>
+        <textarea class="code-editor" id="python-code">print("Hello, Python!")</textarea>
+        <button class="run-btn" onclick="runCode('python')">Run</button>
+        <pre class="output-box" id="python-output"></pre>
+        <button class="back-btn" onclick="navigateTo('practice')">⬅ Back to Language Selection</button>
+    </div>
+
+    <!-- Java Editor -->
+    <div class="container" id="practice-java" style="display: none;">
+        <h1>Java Editor</h1>
+        <textarea class="code-editor" id="java-code">public class Main { public static void main(String[] args) { System.out.println("Hello, Java!"); } }</textarea>
+        <button class="run-btn" onclick="runCode('java')">Run</button>
+        <pre class="output-box" id="java-output"></pre>
+        <button class="back-btn" onclick="navigateTo('practice')">⬅ Back to Language Selection</button>
+    </div>
+
+    <!-- C++ Editor -->
+    <div class="container" id="practice-cpp" style="display: none;">
+        <h1>C++ Editor</h1>
+        <textarea class="code-editor" id="cpp-code">
+#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, World!";
+    return 0;
+}
+        </textarea>
+        <button class="run-btn" onclick="runCPP()">Run</button>
+        <pre class="output-box" id="cpp-output"></pre>
+        <button class="back-btn" onclick="navigateTo('practice')">⬅ Back to Language Selection</button>
+    </div>
+
+    <!-- CSS Editor -->
+    <div class="container" id="practice-css" style="display: none;">
+        <h1>CSS Editor</h1>
+        <textarea class="code-editor" id="css-code">body { background-color: lightblue; }</textarea>
+        <button class="run-btn" onclick="runCSS()">Run</button>
+        <pre class="output-box" id="css-output"></pre>
+        <button class="back-btn" onclick="navigateTo('practice')">⬅ Back to Language Selection</button>
+    </div>
+
+    <!-- HTML Editor -->
+    <div class="container" id="practice-html" style="display: none;">
+        <h1>HTML Editor</h1>
+        <textarea class="code-editor" id="html-code"><h1>Hello, HTML!</h1></textarea>
+        <button class="run-btn" onclick="runHTML()">Run</button>
+        <div class="output-box" id="html-output"></div>
+        <button class="back-btn" onclick="navigateTo('practice')">⬅ Back to Language Selection</button>
+    </div>
+
+    <!-- Test Your AI Knowledge -->
+    <div class="container" id="Knowledge" style="display: none;">
+        <h1>Test Your AI Knowledge</h1>
+        <p>Answer the following questions to test your understanding of AI and coding. You have <span id="timer">60</span> seconds!</p>
+        <div id="progress-bar">
+            <div id="progress"></div>
+        </div>
+        <div id="quiz"></div>
+        <button class="run-btn" onclick="submitQuiz()">Submit Quiz</button>
+        <div id="quiz-results" class="output-box"></div>
+        <button class="back-btn" onclick="navigateTo('main-menu')">⬅ Back to Main Menu</button>
+        <button class="run-btn" onclick="restartQuiz()">🔄 Restart Quiz</button>
+    </div>
+   
+    <script>
+        function navigateTo(page) {
+        document.querySelectorAll('.container').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        const target = document.getElementById(page);
+        if (target) {
+            target.style.display = 'block';
+        }
+
+        if (page === 'Knowledge') {
+            currentQuestionIndex = 0;
+            score = 0;
+            timeLeft = 60;
+            userAnswers = new Array(quizQuestions.length).fill(null);
+            buildQuiz();
+            startTimer();
+        }
+    }
+
+    // ⬇️ ADD viewHistory() here
+    function viewHistory() {
+        navigateTo('quiz-history');
+
+        const history = JSON.parse(localStorage.getItem('quizHistory')) || [];
+        const container = document.getElementById('history-content');
+
+        if (!container) {
+            console.error("Element with id 'history-content' not found.");
+            return;
+        }
+
+        if (history.length === 0) {
+            container.innerHTML = "<p>No quiz history yet. Take a quiz to get started!</p>";
+            return;
+        }
+
+        const reversed = history.slice().reverse(); // show latest first
+
+        container.innerHTML = reversed.map((entry, index) => `
+            <div style="margin-bottom: 15px; padding: 10px; background: #f0f0f0; border-radius: 8px;">
+                <p><strong>Attempt ${reversed.length - index}</strong></p>
+                <p>📅 Date: ${entry.date}</p>
+                <p>📈 Score: ${entry.score} / ${entry.total}</p>
+                <p>🎯 Percentage: ${Math.round((entry.score / entry.total) * 100)}%</p>
+            </div>
+        `).join('');
+    }
+
+    function clearHistory() {
+        if (confirm("Are you sure you want to clear all quiz history?")) {
+            localStorage.removeItem('quizHistory');
+            viewHistory(); // Refresh display
+        }
+    }
+
+        function restartQuiz() {
+    currentQuestionIndex = 0;
+    score = 0;
+    timeLeft = 60;
+    userAnswers = new Array(quizQuestions.length).fill(null);
+    document.getElementById('quiz-results').innerHTML = '';
+    buildQuiz();
+    startTimer();
+}
+
+
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "What does AI stand for?",
+                answers: ["Artificial Intelligence", "Automated Inference", "Advanced Internet", "Algorithmic Integration"],
+                correctAnswer: "Artificial Intelligence"
+            },
+            {
+                question: "Which programming language is most commonly used in AI?",
+                answers: ["Python", "Java", "C++", "JavaScript"],
+                correctAnswer: "Python"
+            },
+            {
+                question: "What is machine learning?",
+                answers: [
+                    "A type of AI that allows systems to learn from data",
+                    "A programming language for robots",
+                    "A method for building computers",
+                    "A type of computer hardware"
+                ],
+                correctAnswer: "A type of AI that allows systems to learn from data"
+            },
+            {
+                question: "Which of these is NOT a machine learning algorithm?",
+                answers: ["Linear Regression", "Random Forest", "Neural Network", "Binary Search"],
+                correctAnswer: "Binary Search"
+            },
+            {
+                question: "What is the purpose of training data in machine learning?",
+                answers: [
+                    "To teach the model patterns and relationships",
+                    "To test the final model's performance",
+                    "To store the model's parameters",
+                    "To visualize the results"
+                ],
+                correctAnswer: "To teach the model patterns and relationships"
+            },
+            {
+                question: "What does NLP stand for in AI?",
+                answers: [
+                    "Natural Language Processing",
+                    "Neural Learning Process",
+                    "Network Language Protocol",
+                    "Normalized Linear Programming"
+                ],
+                correctAnswer: "Natural Language Processing"
+            },
+            {
+                question: "Which of these is a popular deep learning framework?",
+                answers: ["TensorFlow", "Django", "Flask", "React"],
+                correctAnswer: "TensorFlow"
+            },
+            {
+                question: "What is overfitting in machine learning?",
+                answers: [
+                    "When a model performs well on training data but poorly on new data",
+                    "When a model is too simple to capture patterns",
+                    "When training takes too long",
+                    "When the dataset is too large"
+                ],
+                correctAnswer: "When a model performs well on training data but poorly on new data"
+            },
+            {
+                question: "What is the main advantage of using AI?",
+                answers: [
+                    "Automating complex tasks and finding patterns in data",
+                    "Making computers faster",
+                    "Reducing the need for programming",
+                    "Eliminating all human jobs"
+                ],
+                correctAnswer: "Automating complex tasks and finding patterns in data"
+            },
+            {
+                question: "Which of these is an example of supervised learning?",
+                answers: [
+                    "Training a model to classify emails as spam or not spam",
+                    "Grouping customers based on purchasing behavior",
+                    "Reducing the dimensionality of a dataset",
+                    "Finding anomalies in network traffic"
+                ],
+                correctAnswer: "Training a model to classify emails as spam or not spam"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeLeft = 60;
+        let timerInterval;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+
+        // Build the Quiz
+        function buildQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizContainer.innerHTML = ''; // Clear the quiz container
+
+            // Show current question
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+            
+            const answers = [];
+            currentQuestion.answers.forEach((answer, i) => {
+                answers.push(
+                    `<label>
+                        <input type="radio" name="question${currentQuestionIndex}" value="${answer}" 
+                               ${userAnswers[currentQuestionIndex] === answer ? 'checked' : ''}>
+                        ${answer}
+                    </label>`
+                );
+            });
+
+            const questionHTML = `
+                <div class="question">
+                    <h3>Question ${currentQuestionIndex + 1}: ${currentQuestion.question}</h3>
+                    <div class="answers">${answers.join('')}</div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button class="run-btn" onclick="prevQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>Previous</button>
+                    <button class="run-btn" onclick="nextQuestion()" ${currentQuestionIndex === quizQuestions.length - 1 ? 'disabled' : ''}>Next</button>
+                </div>
+            `;
+            quizContainer.innerHTML = questionHTML; // Set current question
+            
+            updateProgressBar();
+        }
+
+        // Save answer and move to next question
+        function nextQuestion() {
+            saveCurrentAnswer();
+            if (currentQuestionIndex < quizQuestions.length - 1) {
+                currentQuestionIndex++;
+                buildQuiz();
+            }
+        }
+
+        // Save answer and move to previous question
+        function prevQuestion() {
+            saveCurrentAnswer();
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                buildQuiz();
+            }
+        }
+
+        // Save the current answer
+        function saveCurrentAnswer() {
+            const selectedOption = document.querySelector(`input[name="question${currentQuestionIndex}"]:checked`);
+            if (selectedOption) {
+                userAnswers[currentQuestionIndex] = selectedOption.value;
+            }
+        }
+
+        // Update Progress Bar
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('progress').style.width = `${progress}%`;
+            document.getElementById('progress').textContent = `${currentQuestionIndex + 1}/${quizQuestions.length}`;
+        }
+
+        // Start Timer
+        function startTimer() {
+            clearInterval(timerInterval); // Clear any existing timer
+            timeLeft = 60;
+            document.getElementById('timer').textContent = timeLeft;
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitQuiz();
+                }
+            }, 1000);
+        }
+
+        
+
+    // Add answer review
+    quizQuestions.forEach((question, index) => {
+        const userAnswer = userAnswers[index] || "Not answered";
+        const isCorrect = userAnswer === question.correctAnswer;
+
+        resultsContainer.innerHTML += `
+            <div style="margin: 10px 0; padding: 10px; background: ${isCorrect ? '#2E7D32' : '#C62828'}; border-radius: 5px;">
+                <p><strong>Question ${index + 1}:</strong> ${question.question}</p>
+                <p><strong>Your answer:</strong> ${userAnswer}</p>
+                ${!isCorrect ? `<p><strong>Correct answer:</strong> ${question.correctAnswer}</p>` : ''}
+            </div>
+        `;
+    });
+// Submit the Quiz
+function submitQuiz() {
+    clearInterval(timerInterval);
+    saveCurrentAnswer();
+
+    // Score Calculation
+    score = 0;
+    quizQuestions.forEach((q, i) => {
+        if (userAnswers[i] === q.correctAnswer) score++;
+    });
+
+    const correct = score;
+    const incorrect = quizQuestions.length - score;
+    const percentage = Math.round((score / quizQuestions.length) * 100);
+
+    // Assign Badge
+    const badge = score === quizQuestions.length
+        ? "🌟 AI Master"
+        : score >= 7
+        ? "🧠 Machine Learning Pro"
+        : score >= 4
+        ? "👩‍💻 AI Apprentice"
+        : "📘 Beginner";
+
+    // Store History in Local Storage
+    const history = JSON.parse(localStorage.getItem('quizHistory')) || [];
+    history.push({
+        score,
+        total: quizQuestions.length,
+        date: new Date().toLocaleString()
+    });
+    localStorage.setItem('quizHistory', JSON.stringify(history));
+
+    // Show Results
+    const resultsContainer = document.getElementById('quiz-results');
+    resultsContainer.innerHTML = `
+        <h2>📊 Quiz Results</h2>
+        <p><strong>Score:</strong> ${score} / ${quizQuestions.length}</p>
+        <p><strong>Percentage:</strong> ${percentage}%</p>
+        <p><strong>✅ Correct:</strong> ${correct} &nbsp;&nbsp;&nbsp; <strong>❌ Incorrect:</strong> ${incorrect}</p>
+        <p><strong>Your Title:</strong> ${badge}</p>
+    `;
+
+    // 🎉 Confetti for perfect score
+    if (score === quizQuestions.length) {
+        launchConfetti(); // Optional: Only if you have a confetti function
+    }
+
+    // 🔁 Show Try Again Modal
+    setTimeout(() => {
+        document.getElementById("try-again-modal").style.display = "flex";
+    }, 500);
+}
+
+        // Navigation function
+        function navigateTo(page) {
+            document.querySelectorAll('.container').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            const target = document.getElementById(page);
+            if (target) {
+                target.style.display = 'block';
+            }
+
+            // Rebuild the quiz if navigating to the Knowledge page
+            if (page === 'Knowledge') {
+                currentQuestionIndex = 0;
+                score = 0;
+                timeLeft = 60;
+                userAnswers = new Array(quizQuestions.length).fill(null);
+                buildQuiz();
+                startTimer();
+                
+            }
+        }
+
+        // Code execution functions
+        function runCSS() {
+            let cssCode = document.getElementById("css-code").value;
+            document.getElementById("css-output").innerText = "CSS applied!";
+            let styleTag = document.createElement("style");
+            styleTag.innerHTML = cssCode;
+            document.head.appendChild(styleTag);
+        }
+
+        function runHTML() {
+            document.getElementById("html-output").innerHTML = document.getElementById("html-code").value;
+        }
+
+        async function runCPP() {
+            const cppCode = document.getElementById('cpp-code').value;
+            const outputElement = document.getElementById('cpp-output');
+            outputElement.innerHTML = "Compiling..."
+            setTimeout(() => {
+                if (cppCode.includes("cout")) {
+                    outputElement.innerHTML = "Hello, World!";
+                } else {
+                    outputElement.innerHTML = "Code executed (simulated). In a real app, this would show actual output.";
+                }
+            }, 1000);
+        }
+
+        function askAI() {
+            const question = document.getElementById('question').value;
+            const responseElement = document.getElementById('response');
+            
+            if (!question) {
+                responseElement.textContent = "Please enter a question.";
+                return;
+            }
+            
+            // Simulate AI response
+            responseElement.textContent = "Thinking...";
+            setTimeout(() => {
+                const responses = [
+                    "AI is transforming industries by automating tasks and providing insights from data.",
+                    "Machine learning is a subset of AI that focuses on algorithms that learn from data.",
+                    "Neural networks are inspired by the human brain and are used in deep learning.",
+                    "Natural Language Processing (NLP) enables computers to understand human language.",
+                    "AI ethics is an important consideration in developing responsible AI systems."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                responseElement.textContent = randomResponse;
+            }, 1500);
+        }
+
+        // Initialize the app
+        window.addEventListener('DOMContentLoaded', () => {
+            navigateTo('ai-home');
+        });
+    </script>
+</body>
+</html>
